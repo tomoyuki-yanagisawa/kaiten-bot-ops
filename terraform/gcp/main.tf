@@ -1,10 +1,10 @@
-variable "GCP_CREDENTIAL_FILE" {}
+variable "GCP_PROFILE" {}
 variable "GCP_PROJECT_ID" {}
 variable "GCP_REGION" {}
 variable "PROJECT_NAME" {}
 
 provider "google" {
-  credentials = file(var.GCP_CREDENTIAL_FILE)
+  credentials = file("~/.gcp/credentials/${var.GCP_PROFILE}.json")
   project     = var.GCP_PROJECT_ID
   region      = var.GCP_REGION
 }

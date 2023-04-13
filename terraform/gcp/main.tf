@@ -1,21 +1,21 @@
-variable "gcp_credential_file" {}
-variable "gcp_project_id" {}
-variable "gcp_region" {}
-variable "project_name" {}
+variable "GCP_CREDENTIAL_FILE" {}
+variable "GCP_PROJECT_ID" {}
+variable "GCP_REGION" {}
+variable "PROJECT_NAME" {}
 
 provider "google" {
-  credentials = file(var.gcp_credential_file)
-  project     = var.gcp_project_id
-  region      = var.gcp_region
+  credentials = file(var.GCP_CREDENTIAL_FILE)
+  project     = var.GCP_PROJECT_ID
+  region      = var.GCP_REGION
 }
 
 resource "google_compute_network" "primary" {
-  name = "${var.project_name}-network"
+  name = "${var.PROJECT_NAME}-network"
 }
 
 resource "google_container_cluster" "primary" {
-  name             = "${var.project_name}-cluster"
-  location         = var.gcp_region
+  name             = "${var.PROJECT_NAME}-cluster"
+  location         = var.GCP_REGION
   network          = google_compute_network.primary.name
 
   // https://github.com/hashicorp/terraform-provider-google/issues/10782#issuecomment-1024488630

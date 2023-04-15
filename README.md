@@ -1,4 +1,4 @@
-# kaiten_bot_deploy
+# kaiten-bot-deploy
 
 ## .env
 

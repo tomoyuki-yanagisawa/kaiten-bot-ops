@@ -2,7 +2,7 @@
 
 ## .env
 
-```
+```bash
 PROJECT_NAME="<ネームスペースとして使う>"
 GCP_PROFILE="<クラウドを切り替える用の名前>" # ~/.gcp/credentials/$GCP_PROFILE.json にクレデンシャルを置く
 GCP_PROJECT_ID="<Teraform で google provider の auth で使う>"

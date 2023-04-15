@@ -3,7 +3,8 @@
   hosts: localhost
   gather_facts: false
   vars:
-    project_name: kaiten-bot
+    project_name: "{{ lookup('env', 'PROJECT_NAME', default=undef()) }}"
+    context_name: "{{ lookup('env', 'K8S_AUTH_CONTEXT', default=undef()) }}"
   roles:
     - k8s-namespace
     - k8s-nginx

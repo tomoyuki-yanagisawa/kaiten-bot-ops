@@ -1,6 +1,7 @@
 variable "GCP_PROFILE" {}
 variable "GCP_PROJECT_ID" {}
 variable "GCP_REGION" {}
+variable "GCP_ZONE_SUFFIX" {}
 variable "PROJECT_NAME" {}
 
 provider "google" {
@@ -25,8 +26,8 @@ resource "google_container_cluster" "primary" {
 }
 
 resource "google_compute_disk" "primary" {
-  name  = "${var.PROJECT_NAME}-mongo-data-b"
+  name  = "${var.PROJECT_NAME}-mongo-data-${var.GCP_ZONE_SUFFIX}"
   type  = "pd-standard"
-  zone  = "asia-northeast1-b"
+  zone  = "${var.GCP_REGION}-${var.GCP_ZONE_SUFFIX}"
   size  = 10
 }

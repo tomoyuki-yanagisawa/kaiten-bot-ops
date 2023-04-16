@@ -6,7 +6,7 @@
       apiVersion: apps/v1
       kind: Deployment
       metadata:
-        name: mysql-master-deployment-b
+        name: "mysql-master-deployment-{{ zone_suffix }}"
         namespace: "{{ project_name }}"
         labels:
           app: mysql-master
@@ -38,11 +38,11 @@
               - name: mysql-master-volume
                 mountPath: /var/lib/mysql
             nodeSelector:
-              topology.kubernetes.io/zone: asia-northeast1-b
+              topology.kubernetes.io/zone: "{{ region }}-{{ zone_suffix }}"
             volumes:
             - name: mysql-master-volume
               gcePersistentDisk:
-                pdName: kaiten-bot-data-b
+                pdName: "{{ project_name }}-mysql-data-{{ zone_suffix }}"
                 fsType: ext4
 - name: Create a Service
   kubernetes.core.k8s:

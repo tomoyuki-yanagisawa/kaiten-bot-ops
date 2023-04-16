@@ -23,3 +23,10 @@ resource "google_container_cluster" "primary" {
   }
   enable_autopilot = true
 }
+
+resource "google_compute_disk" "primary" {
+  name  = "${var.PROJECT_NAME}-mongo-data-b"
+  type  = "pd-standard"
+  zone  = "asia-northeast1-b"
+  size  = 10
+}

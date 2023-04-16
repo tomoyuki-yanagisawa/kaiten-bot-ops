@@ -1,0 +1,13 @@
+---
+- name: deploy application
+  hosts: localhost
+  gather_facts: false
+  vars:
+    project_name: "{{ lookup('env', 'PROJECT_NAME', default=undef()) }}"
+    context_name: "{{ lookup('env', 'K8S_AUTH_CONTEXT', default=undef()) }}"
+    region: "{{ lookup('env', 'GCP_REGION', default=undef()) }}"
+    zone_suffix: "{{ lookup('env', 'GCP_ZONE_SUFFIX', default=undef()) }}"
+    mongo_root_password: "{{ lookup('env', 'MYSQL_ROOT_PASSWORD', default=undef()) }}"
+  roles:
+    - k8s-namespace
+    - k8s-mongo

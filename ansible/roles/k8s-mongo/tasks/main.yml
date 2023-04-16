@@ -1,0 +1,65 @@
+---
+- name: Create a StatefulSet
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: apps/v1
+      kind: StatefulSet
+      metadata:
+        name: "mongo-deployment-{{ zone_suffix }}"
+        namespace: "{{ project_name }}"
+        labels:
+          app: mongo
+          tier: db
+      spec:
+        replicas: 1
+        selector:
+          matchLabels:
+            app: mongo
+            tier: db
+        strategy:
+          type: Recreate
+        template:
+          metadata:
+            labels:
+              app: mongo
+              tier: db
+          spec:
+            containers:
+            - name: mongo
+              image: mongo
+              env:
+              - name: MONGO_INITDB_ROOT_USERNAME
+                value: root
+              - name: MONGO_INITDB_ROOT_PASSWORD
+                value: "{{ mongo_root_password }}"
+              ports:
+              - containerPort: 27017
+              volumeMounts:
+              - name: mongo-volume
+                mountPath: /data/db
+            nodeSelector:
+              topology.kubernetes.io/zone: "{{ region }}-{{ zone_suffix }}"
+            volumes:
+            - name: mongo-volume
+              gcePersistentDisk:
+                pdName: "{{ project_name }}-mongo-data-{{ zone_suffix }}"
+                fsType: ext4
+- name: Create a Service
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: "mongo-service"
+        namespace: "{{ project_name }}"
+      spec:
+        type: NodePort
+        selector:
+          app: "mongo"
+          tier: db
+        ports:
+          - port: 27017
+            targetPort: 27017
+            protocol: TCP

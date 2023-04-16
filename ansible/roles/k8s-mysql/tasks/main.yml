@@ -1,0 +1,64 @@
+---
+- name: Create a Deployment
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: mysql-master-deployment-b
+        namespace: "{{ project_name }}"
+        labels:
+          app: mysql-master
+          tier: db
+      spec:
+        selector:
+          matchLabels:
+            app: mysql-master
+            tier: db
+        strategy:
+          type: Recreate
+        template:
+          metadata:
+            labels:
+              app: mysql-master
+              tier: db
+          spec:
+            containers:
+            - name: mysql
+              image: mysql:5.7
+              args:
+              - "--ignore-db-dir=lost+found" # https://github.com/docker-library/mysql/issues/186#issuecomment-250735297
+              env:
+              - name: MYSQL_ROOT_PASSWORD
+                value: "{{ mysql_root_password }}"
+              ports:
+              - containerPort: 3306
+              volumeMounts:
+              - name: mysql-master-volume
+                mountPath: /var/lib/mysql
+            nodeSelector:
+              topology.kubernetes.io/zone: asia-northeast1-b
+            volumes:
+            - name: mysql-master-volume
+              gcePersistentDisk:
+                pdName: kaiten-bot-data-b
+                fsType: ext4
+- name: Create a Service
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: "mysql-master-service"
+        namespace: "{{ project_name }}"
+      spec:
+        type: NodePort
+        selector:
+          app: "mysql-master"
+          tier: db
+        ports:
+          - port: 3306
+            targetPort: 3306
+            protocol: TCP

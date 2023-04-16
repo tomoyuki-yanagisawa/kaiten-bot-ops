@@ -1,0 +1,11 @@
+---
+- name: deploy application
+  hosts: localhost
+  gather_facts: false
+  vars:
+    project_name: "{{ lookup('env', 'PROJECT_NAME', default=undef()) }}"
+    context_name: "{{ lookup('env', 'K8S_AUTH_CONTEXT', default=undef()) }}"
+    mysql_root_password: "{{ lookup('env', 'MYSQL_ROOT_PASSWORD', default=undef()) }}"
+  roles:
+    - k8s-namespace
+    - k8s-mysql

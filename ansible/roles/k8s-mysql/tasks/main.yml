@@ -32,7 +32,10 @@
               - "--ignore-db-dir=lost+found" # https://github.com/docker-library/mysql/issues/186#issuecomment-250735297
               env:
               - name: MYSQL_ROOT_PASSWORD
-                value: "{{ mysql_root_password }}"
+                valueFrom:
+                secretKeyRef:
+                  name: "{{ project_name }}-secret"
+                  key: MYSQL_ROOT_PASSWORD
               ports:
               - containerPort: 3306
               volumeMounts:

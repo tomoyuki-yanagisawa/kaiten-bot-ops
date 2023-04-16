@@ -31,3 +31,10 @@ resource "google_compute_disk" "mongo" {
   zone  = "${var.GCP_REGION}-${var.GCP_ZONE_SUFFIX}"
   size  = 10
 }
+
+resource "google_compute_disk" "mysql" {
+  name  = "${var.PROJECT_NAME}-mysql-data-${var.GCP_ZONE_SUFFIX}"
+  type  = "pd-standard"
+  zone  = "${var.GCP_REGION}-${var.GCP_ZONE_SUFFIX}"
+  size  = 10
+}

@@ -1,10 +1,10 @@
 ---
-- name: Create a Deployment
+- name: Create a StatefulSet
   kubernetes.core.k8s:
     state: present
     definition:
       apiVersion: apps/v1
-      kind: Deployment
+      kind: StatefulSet
       metadata:
         name: "mysql-master-deployment-{{ zone_suffix }}"
         namespace: "{{ project_name }}"
@@ -12,6 +12,7 @@
           app: mysql-master
           tier: db
       spec:
+        replicas: 1
         selector:
           matchLabels:
             app: mysql-master

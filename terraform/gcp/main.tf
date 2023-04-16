@@ -25,7 +25,7 @@ resource "google_container_cluster" "primary" {
   enable_autopilot = true
 }
 
-resource "google_compute_disk" "primary" {
+resource "google_compute_disk" "mongo" {
   name  = "${var.PROJECT_NAME}-mongo-data-${var.GCP_ZONE_SUFFIX}"
   type  = "pd-standard"
   zone  = "${var.GCP_REGION}-${var.GCP_ZONE_SUFFIX}"
